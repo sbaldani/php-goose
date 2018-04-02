@@ -128,22 +128,23 @@ class MetaExtractor extends AbstractModule implements ModuleInterface {
      * @return string
      */
     private function getTitle(): string {
-        $openGraph = $this->article()->getOpenGraph();
+        $nodes = $this->article()->getDoc()->find('html > head > title');
 
+        if ($nodes->count()) {
+            return Helper::textNormalise($nodes->first()->text());
+        }
+
+        $openGraph = $this->article()->getOpenGraph();
         // Rely on OpenGraph in case we have the data
         if (isset($openGraph['title'])) {
-            return $this->cleanTitle($openGraph['title']);
+            return $openGraph['title'];
         }
 
         $nodes = $this->getNodesByLowercasePropertyValue($this->article()->getDoc(), 'meta', 'name', 'headline');
         if ($nodes->count()) {
-            return $this->cleanTitle($nodes->first()->attr('content'));
+            return $nodes->first()->attr('content');
         }
 
-        $nodes = $this->article()->getDoc()->find('html > head > title');
-        if ($nodes->count()) {
-            return $this->cleanTitle(Helper::textNormalise($nodes->first()->text()));
-        }
 
         return '';
     }
