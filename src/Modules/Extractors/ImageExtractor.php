@@ -60,7 +60,7 @@ class ImageExtractor extends AbstractModule implements ModuleInterface {
      * @return Image|null
      */
     private function getBestImage(): ?Image {
-        $image = $this->checkForKnownElements();
+        $image = $this->checkForMetaTag();
 
         if ($image) {
             return $image;
