@@ -66,7 +66,7 @@ class ImageExtractor extends AbstractModule implements ModuleInterface {
             return $image;
         }
 
-        $image = $this->checkForMetaTag();
+        $image = $this->checkForKnownElements();
 
         if ($image) {
             return $image;
